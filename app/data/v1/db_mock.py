@@ -1,12 +1,16 @@
 from datetime import datetime
 from typing import List
 
-from app.model.v1.users.Organization import Organization
-from app.model.v1.users.Project import Project
-from app.model.v1.users.User import User
+from app.model.v1.Organization import Organization
+from app.model.v1.Project import Project
+from app.model.v1.User import User
+
+USER01_ID = 11111
+USER02_ID = 11112
+USER03_ID = 11113
 
 hubstaff_users: List[User] = [User(
-    id=11111,
+    id=USER01_ID,
     name="user1",
     last_activity=str(datetime.today()),
     email="email1@email.com",
@@ -17,7 +21,7 @@ hubstaff_users: List[User] = [User(
         id=1111, name="proj1", last_activity=str(datetime.today()), status="ok"
     )]
 ), User(
-    id=11112,
+    id=USER02_ID,
     name="user2",
     last_activity=str(datetime.today()),
     email="email2@email.com",
@@ -28,7 +32,7 @@ hubstaff_users: List[User] = [User(
         id=1112, name="proj2", last_activity=str(datetime.today()), status="ok"
     )]
 ), User(
-    id=11113,
+    id=USER03_ID,
     name="user3",
     last_activity=str(datetime.today()),
     email="email3@email.com",
