@@ -30,6 +30,7 @@ uvicorn = "==0.11.6"
 wcwidth = "==0.2.5"
 websockets = "==8.1"
 flake8 = "*"
+allure-pytest = "*"
 
 [requires]
 python_version = "3.8"
