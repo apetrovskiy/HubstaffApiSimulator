@@ -34,6 +34,70 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+#    - name: Test with pytest
+#      run: |
+#        pytest
+#
+#    - name: Lint with flake8
+#      run: |
+#        flake8 .
     - name: Test with pytest
+      if: always()
       run: |
-        pytest
+        pwd
+        pytest --alluredir=allure-results
+#     - name: Analysing the code with pylint
+#       run: |
+#         pylint `ls -R|grep .py$|xargs`
+
+    - name: Look at Allure
+      if: always()
+      uses: ./.github/actions/allure-show
+
+    # TODO: de-duplicate
+    - name: Archive Allure results
+      if: always()
+      uses: actions/upload-artifact@v2
+      with:
+        name: allure-results
+        path: allure-results
+
+  allure:
+    runs-on: ubuntu-latest
+    if: always()
+    needs: build
+    steps:
+
+    - name: Download all workflow run artifacts
+      uses: actions/download-artifact@v2
+
+    - name: Get Allure history
+      uses: actions/checkout@v2
+      if: always()
+      continue-on-error: true
+      with:
+        ref: gh-pages
+        path: gh-pages
+
+    - name: Allure Report with history
+      uses: simple-elf/allure-report-action@v1.5
+      if: always()
+
+    - name: Allure Report action from marketplace
+      uses: simple-elf/allure-report-action@master
+      if: always()
+      #id: allure-report
+      with:
+        allure_results: allure-results
+        gh_pages: gh-pages
+        allure_report: allure-report
+        allure_history: allure-history
+        keep_reports: 50
+
+    - name: Deploy report to Github Pages
+      if: always()
+      uses: peaceiris/actions-gh-pages@v2
+      env:
+        PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PUBLISH_BRANCH: gh-pages
+        PUBLISH_DIR: allure-history
